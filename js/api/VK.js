@@ -8,12 +8,14 @@ class VK {
 
   static ACCESS_TOKEN = 'vk1.a.kuzBJ-Hu4cxJ-Qt39sr5OJZB_pqzauT4KXyyPg36-GhJrqz7pXD6TRiyQeDRC_P1P4bzFGXd32WoMO52_wuZcYsRTZmmeXY82-DWjfimovfY4Lr0QWTgaSJNYnFfw32jtfNVCyI8WSiNz5pBQXyifky16-HgvkooaXCNG4gaauvmpMrwqXL3v1JYlRehaMBX';
   static lastCallback;
+  static owner_id;
 
   /**
    * Получает изображения
    * */
   static get(id='', callback) {
     VK.lastCallback = callback;
+    VK.owner_id = id;
     const params = {
       'owner_id': id,
       'album_id': 'profile',
@@ -32,15 +34,20 @@ class VK {
    * Передаётся в запрос VK API для обработки ответа.
    * Является обработчиком ответа от сервера.
    */
-  static async processData(result){
+  static processData(result){
     document.querySelector('script').remove();
+    // console.log(result);
+    const listImg = [];
     if (result.error) {
       alert(`Ошибка: ${result.error.error_msg}`)
-      return;
-    }
-    const listImg = [];
-    for (let i=0; i<result.response.items.length; i++) {
-      listImg.push(result.response.items[i].sizes.pop()['url'])
+      // return VK.lastCallback(listImg);
+    } else if (result.response.count == 0) {
+      alert(`У профиля с ID ${VK.owner_id} нет фотографий. 😢`)
+      // return VK.lastCallback(listImg);
+    } else {
+      for (let i=0; i<result.response.items.length; i++) {
+        listImg.push(result.response.items[i].sizes.pop()['url'])
+      }
     }
     VK.lastCallback(listImg);
   }

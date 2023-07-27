@@ -16,21 +16,38 @@ class SearchBlock {
    * только клик по кнопке "Заменить" перед отрисовкой очищает все отрисованные ранее изображения
    */
   registerEvents(){
-    this.search.addEventListener('change', () => {
-      // this.value = this.search.value;
-      // console.log(this.value)
-      // let newList;
+    this.replace.addEventListener('click', () => {
       VK.get(this.search.value, (listImg) => {
-        console.log('search', listImg)
-        const row = document.querySelector('div.gutters.ui.small.images')
-        console.log('request', row)
-        // const newList = listImg
-        // return newList;
+        this.search.value = '';
+        this.search.focus();
+        if (listImg.length > 0) {
+          const row = document.querySelector('div.gutters.ui.small.images');
+          row.textContent = '';
+          for (let i=0; i<listImg.length; i++) {
+            const img = document.createElement('img');
+            img.className = 'ui image';
+            img.src = listImg[i];
+            row.insertAdjacentElement('afterbegin', img);
+          }
+        }
       });
-      // console.log('request', a)
-      // console.log('newList', newList)
+    });
+
+    this.add.addEventListener('click', () => {
+      VK.get(this.search.value, (listImg) => {
+        this.search.value = '';
+        this.search.focus();
+        if (listImg.length > 0) {
+          const row = document.querySelector('div.gutters.ui.small.images');
+          for (let i=0; i<listImg.length; i++) {
+            const img = document.createElement('img');
+            img.className = 'ui image';
+            img.src = listImg[i];
+            row.insertAdjacentElement('afterbegin', img);
+          }
+        }
+      });
     });
 
   }
-
 }
