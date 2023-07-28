@@ -36,17 +36,14 @@ class VK {
    */
   static processData(result){
     document.querySelector('script').remove();
-    // console.log(result);
     const listImg = [];
     if (result.error) {
-      alert(`Ошибка: ${result.error.error_msg}`)
-      // return VK.lastCallback(listImg);
+      alert(`Ошибка: ${result.error.error_msg}`);
     } else if (result.response.count == 0) {
-      alert(`У профиля с ID ${VK.owner_id} нет фотографий. 😢`)
-      // return VK.lastCallback(listImg);
+      alert(`У профиля с ID ${VK.owner_id} нет фотографий. 😢`);
     } else {
       for (let i=0; i<result.response.items.length; i++) {
-        listImg.push(result.response.items[i].sizes.pop()['url'])
+        listImg.push(result.response.items[i].sizes.pop()['url']);
       }
     }
     VK.lastCallback(listImg);

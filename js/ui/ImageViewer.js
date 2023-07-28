@@ -4,7 +4,12 @@
  * */
 class ImageViewer {
   constructor( element ) {
-
+    this.images = element.querySelector('.images-list .row');
+    this.selectAll = element.querySelector('.select-all');
+    this.showUploadedFiles = element.querySelector('.show-uploaded-files');
+    this.send = element.querySelector('.send');
+    this.wideImg = element.querySelector('.column.six.wide');
+    this.registerEvents();
   }
 
   /**
@@ -17,6 +22,84 @@ class ImageViewer {
    * 5. Клик по кнопке "Отправить на диск" открывает всплывающее окно для загрузки файлов
    */
   registerEvents(){
+    this.images.addEventListener('click', (event) => {
+      // Меняет класс активности у изображения по клику
+      if (event.target != this.images) {
+        event.target.classList.toggle('disabled');
+        event.target.classList.toggle('selected');
+      }
+    });
+
+    this.images.addEventListener('dblclick', (event) => {
+      // Отображает изображаения в блоке предпросмотра при двойном клике
+      if (event.target != this.images) {
+        const img = this.wideImg.querySelectorAll('img');
+        if (img.length > 1) {
+          img[0].remove();
+        } else {
+          img[0].classList.add('hidden');
+          img[0].classList.remove('fluid');
+        }
+        const newImg = document.createElement('img');
+        newImg.src = event.target.src;
+        newImg.className = 'ui fluid image';
+        this.wideImg.insertAdjacentElement('afterbegin', newImg);
+      }
+    });
+
+    this.wideImg.addEventListener('dblclick', (event) => {
+      // Удаляет изображение из области предпросмотра при двойном клике
+      if (event.target != this.images) {
+        const img = this.wideImg.querySelectorAll('img');
+        if (img.length > 1) {
+          img[0].remove();
+          img[1].classList.remove('hidden');
+          img[1].classList.add('fluid');
+        }
+      }
+    });
+
+    // мой старый вариант *******************************************************************+
+    // this.images.addEventListener('click', (event) => {
+    //   // Меняет класс активности у изображения по клику
+    //   if (event.target != this.images) {
+    //     event.target.classList.toggle('disabled');
+    //     event.target.classList.toggle('selected');
+    //   }
+    //   console.log(document.querySelectorAll('img.selected'))
+    // });
+
+    // this.images.addEventListener('dblclick', (event) => {
+    //   // Отображает изображаения в блоке предпросмотра при двойном клике
+    //   if (event.target != this.images) {
+    //     const img = this.wideImg.querySelectorAll('img');
+    //     if (img.length > 1) {
+    //       img[0].remove();
+    //     } else {
+    //       img[0].classList.add('hidden');
+    //       img[0].classList.remove('fluid');
+    //     }
+    //     const newImg = document.createElement('img');
+    //     newImg.src = event.target.src;
+    //     newImg.className = 'ui fluid image';
+    //     this.wideImg.insertAdjacentElement('afterbegin', newImg);
+    //   }
+    // });
+
+    // this.wideImg.addEventListener('dblclick', (event) => {
+    //   // Удаляет изображение из области предпросмотра при двойном клике
+    //   if (event.target != this.images) {
+    //     const img = this.wideImg.querySelectorAll('img');
+    //     img[0].remove();
+    //     img[1].classList.remove('hidden');
+    //     img[1].classList.add('fluid');
+    //   }
+    // });
+    // мой старый вариант *******************************************************************-
+
+    this.selectAll.addEventListener('click', (event) => {
+      // Выбирает все активные изображения
+    });
 
   }
 
@@ -31,7 +114,17 @@ class ImageViewer {
    * Отрисовывает изображения.
   */
   drawImages(images) {
+    for (let i=0; i<images.length; i++) {
+      const img = document.createElement('img');
+      img.className = 'ui small image disabled';
+      img.src = images[i];
 
+      const div = document.createElement('div');
+      div.className = 'image-wrapper';
+      div.insertAdjacentElement('afterbegin', img)
+      this.images.insertAdjacentElement('afterbegin', div);
+    }
+    this.selectAll.classList.remove('disabled');
   }
 
   /**
