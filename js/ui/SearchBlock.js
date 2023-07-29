@@ -24,7 +24,7 @@ class SearchBlock {
         this.search.focus();
         if (listImg.length > 0) {
           const imageDiv = App.imageViewer;
-          imageDiv.images.textContent = '';
+          imageDiv.clear();
           imageDiv.drawImages(listImg);
         }
       });
@@ -51,7 +51,7 @@ class SearchBlock {
         this.search.focus();
         if (listImg.length > 0) {
           const imageDiv = App.imageViewer;
-          imageDiv.images.textContent = '';
+          imageDiv.clear();
           imageDiv.drawImages(listImg);
         }
       });

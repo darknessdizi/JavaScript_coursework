@@ -3,12 +3,12 @@
  * Используется для взаимодействием блоком изображений
  * */
 class ImageViewer {
-  constructor( element ) {
+  constructor(element) {
     // this.images = element.querySelector('.images-list .row');
     this.images = element.querySelector('.gutters');
-    this.selectAll = element.querySelector('.select-all');
+    this.buttonSelectAll = element.querySelector('.select-all');
     this.showUploadedFiles = element.querySelector('.show-uploaded-files');
-    this.send = element.querySelector('.send');
+    this.buttnoSend = element.querySelector('.send');
     this.wideImg = element.querySelector('.column.six.wide');
     this.registerEvents();
   }
@@ -28,6 +28,7 @@ class ImageViewer {
       if (event.target != this.images) {
         event.target.classList.toggle('disabled');
         event.target.classList.toggle('selected');
+        this.buttonSelectAll.textContent = this.checkButtonText();
       }
     });
 
@@ -60,14 +61,23 @@ class ImageViewer {
       }
     });
 
-    this.selectAll.addEventListener('click', (event) => {
-      // Выбирает все активные изображения
-      const list = this.images.querySelectorAll('img');
-      for (let img of list) {
-        if (img.className.includes('disabled')) {
+    this.buttonSelectAll.addEventListener('click', (event) => {
+      // Выбирает все изображения или отменяет активные из них
+      const textButton = this.buttonSelectAll.textContent;
+      if (textButton.includes('Снять выделение')) {
+        const listImg = this.images.querySelectorAll('img.selected');
+        listImg.forEach((element) => {
+          element.classList.add('disabled');
+          element.classList.remove('selected');
+        });
+        this.buttonSelectAll.textContent = this.checkButtonText();
+      } else {
+        const listAllImg = this.images.querySelectorAll('img');
+        for (let img of listAllImg) {
           img.classList.remove('disabled');
           img.classList.add('selected');
         }
+        this.buttonSelectAll.textContent = this.checkButtonText();
       }
     });
 
@@ -77,7 +87,7 @@ class ImageViewer {
    * Очищает отрисованные изображения
    */
   clear() {
-
+    this.images.textContent = '';
   }
 
   /**
@@ -90,14 +100,28 @@ class ImageViewer {
       img.src = images[i];
       this.images.insertAdjacentElement('afterbegin', img);
     }
-    this.selectAll.classList.remove('disabled');
+    if (this.buttonSelectAll.className.includes('disabled')) {
+      this.buttonSelectAll.classList.remove('disabled');
+    }
+    this.buttonSelectAll.textContent = this.checkButtonText();
   }
 
   /**
    * Контроллирует кнопки выделения всех изображений и отправки изображений на диск
    */
   checkButtonText(){
-
+    let arrayImage = this.images.querySelectorAll('img');
+    arrayImage = Array.from(arrayImage);
+    const findElement = arrayImage.find((element) => {
+      return element.className.includes('selected');
+    });
+    if (findElement) {
+      this.buttnoSend.classList.remove('disabled');
+      return 'Снять выделение';
+    } else {
+      this.buttnoSend.classList.add('disabled');
+      return 'Выбрать всё';
+    }
   }
 
 }
