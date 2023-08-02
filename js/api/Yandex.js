@@ -30,7 +30,7 @@ class Yandex {
         'path': path,
         'url': url,
       },
-      'url': Yandex.HOST + '/resources/upload?',
+      'url': Yandex.HOST + '/resources/upload',
       'callback': callback,
     });
   }

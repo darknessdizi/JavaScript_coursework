@@ -21,7 +21,6 @@ class FileUploaderModal extends BaseModal{
    * отправляет одно изображение, если клик был по кнопке отправки
    */
   registerEvents(){
-    // console.log(this.divContent)
     this.divHeader.children[0].addEventListener('click', () => {
       this.close();
     });
@@ -70,8 +69,8 @@ class FileUploaderModal extends BaseModal{
     const element = `
       <div class="image-preview-container">
         <img src="${item.src}" />
-        <div class="ui action input error">
-          <input type="text" placeholder="Путь к файлу">
+        <div class="ui action input">
+          <input type="text" placeholder="Путь к файлу" value="Noname">
           <button class="ui button"><i class="upload icon"></i></button>
         </div>
       </div>
@@ -83,14 +82,16 @@ class FileUploaderModal extends BaseModal{
    * Отправляет все изображения в облако
    */
   sendAllImages() {
-    console.log('Отправка файлов на яндекс') // ************************!!!!!!!!!!
-  }
+    const array = Array.from(this.divContent.children);
+    array.forEach((element) => {
+      this.sendImage(element);
+    });
+  } 
 
   /**
    * Валидирует изображение и отправляет его на сервер
    */
   sendImage(imageContainer) {
-    // console.log('Отправка', imageContainer);
     const div = imageContainer.querySelector('div.ui');
     if (div.className.includes('error')) {
       div.classList.add('disabled');
@@ -100,7 +101,13 @@ class FileUploaderModal extends BaseModal{
       const src = imageContainer.querySelector('img').src;
       const path = imageContainer.querySelector('input').value;
       const callback = () => {
-        console.log('Удаляем блок с отправленной фоткой');
+        const object = imageContainer;
+        console.log(object)
+        object.remove();
+        // console.log(object)
+        if (this.divContent.children.length == 0) {
+          App.getModal('fileUploader').close();
+        }
       };
       Yandex.uploadFile(path, src, callback);
     }
