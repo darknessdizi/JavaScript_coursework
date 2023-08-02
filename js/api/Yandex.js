@@ -10,14 +10,29 @@ class Yandex {
    * Метод формирования и сохранения токена для Yandex API
    */
   static getToken(){
-
+    if (!localStorage.getItem('tokenYandex')) {
+      const token = prompt('Введите токен для Yandex disc: ');
+      localStorage.setItem('tokenYandex', token);
+    }
   }
 
   /**
    * Метод загрузки файла в облако
    */
   static uploadFile(path, url, callback){
-
+    createRequest({
+      'method': 'POST',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
+      },
+      'data': {
+        'path': path,
+        'url': url,
+      },
+      'url': Yandex.HOST + '/resources/upload?',
+      'callback': callback,
+    });
   }
 
   /**

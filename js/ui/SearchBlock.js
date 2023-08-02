@@ -18,44 +18,36 @@ class SearchBlock {
   registerEvents() {
     this.replace.addEventListener('click', () => {
       // Событие кнопки заменить
-      VK.get(this.search.value, (listImg) => {
-        VK.lastCallback = () => {};
-        this.search.value = '';
-        this.search.focus();
-        if (listImg.length > 0) {
+      if (this.search.value.trim()) {
+        VK.get(this.search.value, (listImg) => {
+          VK.lastCallback = () => {};
+          this.search.value = '';
+          this.search.focus();
           const imageDiv = App.imageViewer;
           imageDiv.clear();
           imageDiv.drawImages(listImg);
-        }
-      });
+        });
+      }
     });
 
     this.add.addEventListener('click', () => {
       // Событие кнопки добавить
-      VK.get(this.search.value, (listImg) => {
-        VK.lastCallback = () => {};
-        this.search.value = '';
-        this.search.focus();
-        if (listImg.length > 0) {
+      if (this.search.value.trim()) {
+        VK.get(this.search.value, (listImg) => {
+          VK.lastCallback = () => {};
+          this.search.value = '';
+          this.search.focus();
           const imageDiv = App.imageViewer;
           imageDiv.drawImages(listImg);
-        }
-      });
+        });
+      }
     });
 
-    this.search.addEventListener('change', () => {
+    this.search.addEventListener('keyup', (event) => {
       // Событие изменения поля input (нажатие Enter)
-      VK.get(this.search.value, (listImg) => {
-        VK.lastCallback = () => {};
-        this.search.value = '';
-        this.search.focus();
-        if (listImg.length > 0) {
-          const imageDiv = App.imageViewer;
-          imageDiv.clear();
-          imageDiv.drawImages(listImg);
-        }
-      });
+      if (event.keyCode === 13) {
+        this.replace.click();
+      }
     });
-
   }
 }

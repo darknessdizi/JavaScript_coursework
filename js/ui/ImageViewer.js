@@ -4,11 +4,10 @@
  * */
 class ImageViewer {
   constructor(element) {
-    // this.images = element.querySelector('.images-list .row');
-    this.images = element.querySelector('.gutters');
+    this.images = element.querySelector('.grid .row');
     this.buttonSelectAll = element.querySelector('.select-all');
-    this.showUploadedFiles = element.querySelector('.show-uploaded-files');
-    this.buttnoSend = element.querySelector('.send');
+    this.buttonShowFiles = element.querySelector('.show-uploaded-files');
+    this.buttonSend = element.querySelector('.send');
     this.wideImg = element.querySelector('.column.six.wide');
     this.registerEvents();
   }
@@ -25,16 +24,15 @@ class ImageViewer {
   registerEvents(){
     this.images.addEventListener('click', (event) => {
       // Меняет класс активности у изображения по клику
-      if (event.target != this.images) {
-        event.target.classList.toggle('disabled');
+      if (!event.target.className.includes('image-wrapper')) {
         event.target.classList.toggle('selected');
-        this.buttonSelectAll.textContent = this.checkButtonText();
+        this.checkButtonText();
       }
     });
 
     this.images.addEventListener('dblclick', (event) => {
       // Отображает изображаения в блоке предпросмотра при двойном клике
-      if (event.target != this.images) {
+      if (!event.target.className.includes('image-wrapper')) {
         const img = this.wideImg.querySelectorAll('img');
         if (img.length > 1) {
           img[0].remove();
@@ -51,7 +49,7 @@ class ImageViewer {
 
     this.wideImg.addEventListener('dblclick', (event) => {
       // Удаляет изображение из области предпросмотра при двойном клике
-      if (event.target != this.images) {
+      if (!event.target.className.includes('image-wrapper')) {
         const img = this.wideImg.querySelectorAll('img');
         if (img.length > 1) {
           img[0].remove();
@@ -62,23 +60,28 @@ class ImageViewer {
     });
 
     this.buttonSelectAll.addEventListener('click', (event) => {
-      // Выбирает все изображения или отменяет активные из них
+      // Клик по кнопке "Выбрать всё" / "Снять выделение"
       const textButton = this.buttonSelectAll.textContent;
       if (textButton.includes('Снять выделение')) {
         const listImg = this.images.querySelectorAll('img.selected');
         listImg.forEach((element) => {
-          element.classList.add('disabled');
           element.classList.remove('selected');
         });
-        this.buttonSelectAll.textContent = this.checkButtonText();
       } else {
         const listAllImg = this.images.querySelectorAll('img');
         for (let img of listAllImg) {
-          img.classList.remove('disabled');
           img.classList.add('selected');
         }
-        this.buttonSelectAll.textContent = this.checkButtonText();
       }
+      this.checkButtonText();
+    });
+
+    this.buttonSend.addEventListener('click', () => {
+      // Клик по кнопке "Отправить на диск"
+      const appUploader = App.getModal('fileUploader');
+      appUploader.open();
+      const images = this.images.querySelectorAll('img.selected');
+      appUploader.showImages(images);
     });
 
   }
@@ -94,16 +97,23 @@ class ImageViewer {
    * Отрисовывает изображения.
   */
   drawImages(images) {
-    for (let i=0; i<images.length; i++) {
-      const img = document.createElement('img');
-      img.className = 'ui image disabled';
-      img.src = images[i];
-      this.images.insertAdjacentElement('afterbegin', img);
-    }
-    if (this.buttonSelectAll.className.includes('disabled')) {
+    if (images.length > 0) {
+      for (let i=0; i<images.length; i++) {
+        const img = document.createElement('img');
+        img.src = images[i];
+        const div = document.createElement('div');
+        div.className = 'four wide column ui medium image-wrapper';
+        div.insertAdjacentElement('afterbegin', img);
+        this.images.insertAdjacentElement('afterbegin', div);
+      }
+    } 
+    const countImg = this.images.querySelectorAll('img');
+    if (countImg.length == 0) {
+      this.buttonSelectAll.classList.add('disabled');
+    } else {
       this.buttonSelectAll.classList.remove('disabled');
     }
-    this.buttonSelectAll.textContent = this.checkButtonText();
+    this.checkButtonText();
   }
 
   /**
@@ -112,15 +122,23 @@ class ImageViewer {
   checkButtonText(){
     let arrayImage = this.images.querySelectorAll('img');
     arrayImage = Array.from(arrayImage);
-    const findElement = arrayImage.find((element) => {
+    const findSelectArray = arrayImage.filter((element) => {
       return element.className.includes('selected');
     });
-    if (findElement) {
-      this.buttnoSend.classList.remove('disabled');
-      return 'Снять выделение';
+    if (findSelectArray.length > 0) {
+      this.buttonSend.classList.remove('disabled');
     } else {
-      this.buttnoSend.classList.add('disabled');
-      return 'Выбрать всё';
+      this.buttonSend.classList.add('disabled');
+    }
+   
+    if (findSelectArray.length == arrayImage.length) {
+      if (findSelectArray.length > 0) {
+        this.buttonSelectAll.textContent = 'Снять выделение';
+      } else {
+        this.buttonSelectAll.textContent = 'Выбрать всё';
+      }
+    } else {
+      this.buttonSelectAll.textContent = 'Выбрать всё';
     }
   }
 
