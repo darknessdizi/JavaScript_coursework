@@ -3,7 +3,7 @@
  * Используется как всплывающее окно для загрузки изображений
  */
 class FileUploaderModal extends BaseModal{
-  constructor( element ) {
+  constructor(element) {
     super(element);
     this.divHeader = this.domElement.children[0];
     this.divContent = this.domElement.children[1];
@@ -91,7 +91,7 @@ class FileUploaderModal extends BaseModal{
   /**
    * Валидирует изображение и отправляет его на сервер
    */
-  sendImage(imageContainer) {
+  sendImage(imageContainer) {    
     const div = imageContainer.querySelector('div.ui');
     if (div.className.includes('error')) {
       div.classList.add('disabled');
@@ -101,15 +101,12 @@ class FileUploaderModal extends BaseModal{
       const src = imageContainer.querySelector('img').src;
       const path = imageContainer.querySelector('input').value;
       const callback = () => {
-        const object = imageContainer;
-        console.log(object)
-        object.remove();
-        // console.log(object)
+        imageContainer.remove();
         if (this.divContent.children.length == 0) {
           App.getModal('fileUploader').close();
         }
       };
       Yandex.uploadFile(path, src, callback);
     }
-  }
+  };
 }

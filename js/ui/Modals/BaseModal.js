@@ -3,7 +3,7 @@
  * Используется как базовый класс всплывающего окна
  */
 class BaseModal {
-  constructor( element ) {
+  constructor(element) {
     this.window = element;
     this.domElement = this.window[0];
   }

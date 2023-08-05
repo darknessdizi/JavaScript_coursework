@@ -39,20 +39,53 @@ class Yandex {
    * Метод удаления файла из облака
    */
   static removeFile(path, callback){
-
+    createRequest({
+      'method': 'DELETE',
+      'headers': {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
+      },
+      'data': {
+        'path': path,
+      },
+      'url': Yandex.HOST + '/resources',
+      'callback': callback,
+    });
   }
 
   /**
    * Метод получения всех загруженных файлов в облаке
    */
   static getUploadedFiles(callback){
-
+    createRequest({
+      'method': 'GET',
+      'headers': {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
+      },
+      'data': {
+        // 'limit': '40',
+        'offset': 20,
+      },
+      'url': Yandex.HOST + '/resources/files',
+      'callback': callback,
+    });
   }
 
   /**
    * Метод скачивания файлов
    */
   static downloadFileByUrl(url){
-
+    createRequest({
+      'method': 'GET',
+      'headers': {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
+      },
+      'data': {
+        'path': url,
+      },
+      'url': Yandex.HOST + '/resources/download',
+    });
   }
 }

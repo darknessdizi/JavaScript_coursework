@@ -84,6 +84,15 @@ class ImageViewer {
       appUploader.showImages(images);
     });
 
+    this.buttonShowFiles.addEventListener('click', () => {
+      // Клик по кнопке "Просмотреть загруженные файлы"
+      const appShow = App.getModal('filePreviewer');
+      appShow.open();
+      Yandex.getUploadedFiles((data) => {
+        console.log('Загрузка из Яндекса', data.items)
+        App.modals.filePreviewer.showImages(data.items);
+      });
+    });
   }
 
   /**
