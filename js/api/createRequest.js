@@ -3,7 +3,7 @@
  * */
 const createRequest = (options = {}) => {
     const url = options['url'] + '?' + new URLSearchParams(options['data']);
-    const xhr = new XMLHttpRequest;
+    const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     
     try {
@@ -15,7 +15,7 @@ const createRequest = (options = {}) => {
     } catch (error) {
         console.error(error);
     }
-    const images = []
+    const images = [];
     
     xhr.onload = function() {
         if (xhr.status >= 400) {

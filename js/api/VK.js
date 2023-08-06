@@ -18,13 +18,14 @@ class VK {
     VK.owner_id = id;
     const params = {
       'owner_id': id,
-      'album_id': 'profile',
-      'extended': 1,
+      // 'album_id': 'profile',
+      // 'extended': 1,
       'photo_sizes': 1,
       'access_token': VK.ACCESS_TOKEN,
       'v': '5.131',
-    }
-    const url = 'https://api.vk.com/method/photos.get?' + new URLSearchParams(params) + '&callback=VK.processData';
+    };
+    // const url = 'https://api.vk.com/method/photos.get?' + new URLSearchParams(params) + '&callback=VK.processData';
+    const url = 'https://api.vk.com/method/photos.getAll?' + new URLSearchParams(params) + '&callback=VK.processData';
     var elem = document.createElement("script");
     elem.src = url;
     document.head.appendChild(elem);

@@ -56,8 +56,8 @@ class FileUploaderModal extends BaseModal{
   showImages(images) {
     const img = Array.from(images);
     img.reverse();
-    const arrayImg = img.map((element, index) => {
-      return this.getImageHTML(element, index);
+    const arrayImg = img.map((element) => {
+      return this.getImageHTML(element);
     });
     this.divContent.innerHTML = arrayImg.join('');
   }
@@ -65,12 +65,15 @@ class FileUploaderModal extends BaseModal{
   /**
    * Формирует HTML разметку с изображением, полем ввода для имени файла и кнопкной загрузки
    */
-  getImageHTML(item, index) {
+  getImageHTML(item) {
+    let name = item.src.split('?')[0];
+    name = name.split('/');
+    name = name[name.length-1];
     const element = `
       <div class="image-preview-container">
         <img src="${item.src}" />
         <div class="ui action input">
-          <input type="text" placeholder="Путь к файлу" value="Noname_${index}">
+          <input type="text" placeholder="Путь к файлу" value="${name}">
           <button class="ui button"><i class="upload icon"></i></button>
         </div>
       </div>
@@ -108,5 +111,5 @@ class FileUploaderModal extends BaseModal{
       };
       Yandex.uploadFile(path, src, callback);
     }
-  };
+  }
 }

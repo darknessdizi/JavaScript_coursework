@@ -49,9 +49,6 @@ class PreviewModal extends BaseModal{
     const arrayImg = data.map((element) => {
       return this.getImageInfo(element);
     });
-    // console.log(this.divContent)
-    // this.divContent.insertAdjacentHTML('beforeend', arrayImg.join(''));
-    // console.log(this.divContent)
     this.divContent.innerHTML = arrayImg.join('');
   } 
 
@@ -68,11 +65,11 @@ class PreviewModal extends BaseModal{
     const year = newDate.getFullYear();
     let hour = String(newDate.getHours());
     if (hour.length < 2) {
-      hour = '0' + hour
+      hour = '0' + hour;
     }
     let minutes = String(newDate.getMinutes());
     if (minutes.length < 2) {
-      minutes = '0' + minutes
+      minutes = '0' + minutes;
     }
     const string = `${day} ${currentMonth} ${year} г. в ${hour}:${minutes}`; 
     return string;

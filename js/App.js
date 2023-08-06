@@ -20,7 +20,7 @@ class App {
     this.modals = {
       fileUploader: new FileUploaderModal($('.ui.modal.file-uploader-modal').modal({closable: false})),
       filePreviewer: new PreviewModal($('.ui.modal.uploaded-previewer-modal').modal({closable: false})),
-    }
+    };
   }
 
    /**
