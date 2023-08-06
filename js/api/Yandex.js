@@ -56,16 +56,15 @@ class Yandex {
   /**
    * Метод получения всех загруженных файлов в облаке
    */
-  static getUploadedFiles(callback){
+  static getUploadedFiles(callback, limit){
     createRequest({
       'method': 'GET',
       'headers': {
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
         'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
       },
       'data': {
-        // 'limit': '40',
-        'offset': 20,
+        'limit': limit,
       },
       'url': Yandex.HOST + '/resources/files',
       'callback': callback,
@@ -79,7 +78,7 @@ class Yandex {
     createRequest({
       'method': 'GET',
       'headers': {
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json',
         'Authorization': `OAuth ${localStorage.getItem('tokenYandex')}`,
       },
       'data': {

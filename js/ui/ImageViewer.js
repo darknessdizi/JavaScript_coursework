@@ -9,6 +9,7 @@ class ImageViewer {
     this.buttonShowFiles = element.querySelector('.show-uploaded-files');
     this.buttonSend = element.querySelector('.send');
     this.wideImg = element.querySelector('.column.six.wide');
+    this.limit = 20;
     this.registerEvents();
   }
 
@@ -89,9 +90,13 @@ class ImageViewer {
       const appShow = App.getModal('filePreviewer');
       appShow.open();
       Yandex.getUploadedFiles((data) => {
-        console.log('Загрузка из Яндекса', data.items)
-        App.modals.filePreviewer.showImages(data.items);
-      });
+        if (data.length == this.limit) {
+          this.limit = data.length * 2;
+          this.buttonShowFiles.click();
+        } else {
+          App.modals.filePreviewer.showImages(data);
+        }
+      }, this.limit);
     });
   }
 

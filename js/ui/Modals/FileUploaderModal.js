@@ -56,8 +56,8 @@ class FileUploaderModal extends BaseModal{
   showImages(images) {
     const img = Array.from(images);
     img.reverse();
-    const arrayImg = img.map((element) => {
-      return this.getImageHTML(element);
+    const arrayImg = img.map((element, index) => {
+      return this.getImageHTML(element, index);
     });
     this.divContent.innerHTML = arrayImg.join('');
   }
@@ -65,12 +65,12 @@ class FileUploaderModal extends BaseModal{
   /**
    * Формирует HTML разметку с изображением, полем ввода для имени файла и кнопкной загрузки
    */
-  getImageHTML(item) {
+  getImageHTML(item, index) {
     const element = `
       <div class="image-preview-container">
         <img src="${item.src}" />
         <div class="ui action input">
-          <input type="text" placeholder="Путь к файлу" value="Noname">
+          <input type="text" placeholder="Путь к файлу" value="Noname_${index}">
           <button class="ui button"><i class="upload icon"></i></button>
         </div>
       </div>

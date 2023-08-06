@@ -15,16 +15,25 @@ const createRequest = (options = {}) => {
     } catch (error) {
         console.error(error);
     }
+    const images = []
     
     xhr.onload = function() {
-        console.log('*******1 xhr.status', xhr.status);
         if (xhr.status >= 400) {
             console.log('Ошибка запроса');
             console.log(xhr.response);
         } else if (xhr.status == 200) {
-            // console.log('******* status 200 ********', xhr.response);
-            options['callback'](xhr.response);
-        } else if ((xhr.status == 202) || (xhr.status == 204)) {  
+            if (xhr.response.href) {
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = xhr.response.href;
+                a.download = '';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                options['callback'](xhr.response.items);
+            }
+        } else if ((xhr.status == 202) || (xhr.status == 204)) { 
             options['callback']();
         } 
     };

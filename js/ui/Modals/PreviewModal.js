@@ -35,7 +35,6 @@ class PreviewModal extends BaseModal{
         });
       } 
       if (event.target.className.includes('download')) {
-        console.log('Скачать файл');
         Yandex.downloadFileByUrl(btn.dataset.file);
       } 
     });
@@ -50,8 +49,11 @@ class PreviewModal extends BaseModal{
     const arrayImg = data.map((element) => {
       return this.getImageInfo(element);
     });
+    // console.log(this.divContent)
+    // this.divContent.insertAdjacentHTML('beforeend', arrayImg.join(''));
+    // console.log(this.divContent)
     this.divContent.innerHTML = arrayImg.join('');
-  }
+  } 
 
   /**
    * Форматирует дату в формате 2021-12-30T20:40:02+00:00(строка)
@@ -64,8 +66,14 @@ class PreviewModal extends BaseModal{
     const currentMonth = month[newDate.getMonth()];
     const day = newDate.getDate();
     const year = newDate.getFullYear();
-    const hour = newDate.getHours();
-    const minutes = newDate.getMinutes();
+    let hour = String(newDate.getHours());
+    if (hour.length < 2) {
+      hour = '0' + hour
+    }
+    let minutes = String(newDate.getMinutes());
+    if (minutes.length < 2) {
+      minutes = '0' + minutes
+    }
     const string = `${day} ${currentMonth} ${year} г. в ${hour}:${minutes}`; 
     return string;
   }
